@@ -15,19 +15,37 @@ jobs:
     steps:
     - name: Clone the GitHub repository on the machine 
       uses: actions/checkout@v4
+
     - name: Use Node.js 20.x
       uses: actions/setup-node@v4
       with:
         node-version: 20
         cache: 'npm'
+
     - name: Install program dependencies     
       run: npm install
-    - name: Start the app
-      run: npm run start & 
-    - name: Run integration tests and save output
-      run: npm run test | tee test-output.log
-    - name: Upload test output as artifact
-      uses: actions/upload-artifact@v4
+
+    - name: Run integration tests
+      run: npm run test 
+
+  security_test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Clone the GitHub repository on the machine 
+      uses: actions/checkout@v4
+
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v4
       with:
-        name: test-results
-        path: test-output.log     
+        node-version: 20
+        cache: 'npm'
+
+    - name: Install program dependencies
+      run: npm install
+
+    - name: Run security tests
+      run:  npm audit 
+
+
+
